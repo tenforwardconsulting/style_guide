@@ -8,6 +8,11 @@
 
 ## Tests
 
+## Javascript
+* Put `document.ready` inside of the javascript file and not the html file
+
+## Stylesheets
+
 ## Reporting to Rollbar
 
 ### Include actionable item
