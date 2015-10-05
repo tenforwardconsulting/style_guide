@@ -10,6 +10,8 @@ This helps simple form correctly display validation errors when the association 
 ## Controllers
 
 ## Views
+### Linking to javascript
+* Prefer setting the href as "#"
 
 ## Tests
 
@@ -69,6 +71,8 @@ Good:
 * Put `document.ready` inside of the javascript file and not the html file
 
 ## Stylesheets
+* Alphabetized
+* Whenever you need to use `!important` there should be a comment explaining why.
 
 ## Reporting to Rollbar
 
