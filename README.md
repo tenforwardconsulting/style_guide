@@ -73,6 +73,7 @@ Good:
 ## Stylesheets
 * Alphabetized
 * Whenever you need to use `!important` there should be a comment explaining why.
+* Color variables that are variations of each other should start with the same base color. e.g. `$copper` and `$copper-light` instead of `$copper` and `$light-copper`
 
 ## Reporting to Rollbar
 
