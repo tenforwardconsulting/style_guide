@@ -10,18 +10,24 @@ This helps simple form correctly display validation errors when the association 
 ## Controllers
 
 ## Views
+
 ### Linking to javascript
 * Prefer setting the href as "#"
 
 ## Tests
 
-### Feature Tests
-Prefer hardcoding values (names, titles, strings in general) instead of having randomly generated ones.
-When expecting that a page has a certain value, using random ones can create false positives and randomly failing tests
+### Factories
+* For any value that needs to be unique, use a sequence. Do not use Faker.
 
-We want to test large pieces of complex functionality that hit multiple areas.
-Also pages that have heavy amounts of javascript.
-We shouldn't write feature tests for simple, one-click functionality. Use controller tests for those instead.
+### Feature Tests
+* Use `feature` and `scenario` instead of `describe` and `it`.
+* Tests should never query on the database. Only test what is visible to the user.
+* Use hardcoded values (names, titles, strings in general) instead of having randomly generated ones.
+  - When expecting that a page has a certain value, using random ones can create false positives and randomly failing tests
+* Test large pieces of complex functionality that hit multiple areas.
+* Test pages that have heavy amounts of javascript.
+* Test multiple things in a single feature spec. This prevents a lot of repetition (clearing the database, creating objects, navigating pages, etc)
+  - e.g. Tests for creating a new record, editing that record, viewing that record and deleting that record should all go in a single `scenario` block.
 
 Bad:
 * This doesn't actually test that it was archived instead of deleted
@@ -65,7 +71,6 @@ Good:
       expect(page).to have_content 'Organization was successfully created.'
       expect(page).to have_content 'Baz High School'
     end
-
 
 ## Javascript
 * Put `document.ready` inside of the javascript file and not the html file
