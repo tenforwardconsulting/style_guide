@@ -1,11 +1,11 @@
 # Style Guide
 
+## Database
+
+* Use foreign key constraints.
+* Foreign keys should be not nullable (`null: false`).
+
 ## Models
-
-### Validating association presence
-
-For belongs\_to associations, do `validates :user_id, presence: true` instead of `validates :user, presence: true`
-This helps simple form correctly display validation errors when the association isn't set.
 
 ## Controllers
 
@@ -31,46 +31,50 @@ This helps simple form correctly display validation errors when the association 
 
 Bad:
 * This doesn't actually test that it was archived instead of deleted
-* This piece of functionality is so small that it would be better of as a controller test
+* This piece of functionality is so small that it would be better as a part of a larger test that also tested creation, viewing, etc.
 
-    scenario 'archives district' do
-      district = FactoryGirl.create :district, name: 'Baz School District'
+```ruby
+scenario 'archives district' do
+  district = FactoryGirl.create :district, name: 'Baz School District'
 
-      admin = FactoryGirl.create :admin
-      sign_in admin
+  admin = FactoryGirl.create :admin
+  sign_in admin
 
-      visit districts_path
-      click_on 'Delete'
-      expect(page).to have_content 'District was successfully deleted.'
-      expect(page).not_to have_content 'Baz School District'
-    end
+  visit districts_path
+  click_on 'Delete'
+  expect(page).to have_content 'District was successfully deleted.'
+  expect(page).not_to have_content 'Baz School District'
+end
+```
 
 Good:
 * This tests that the page's javascript is working correctly
 * It's commented explaining what the javascript is doing
 
-    scenario 'as an admin, I create an organization for a district', js: true do
-      FactoryGirl.create :district, name: 'Baz School District', country: 'US'
-      admin = FactoryGirl.create :admin
+```ruby
+scenario 'as an admin, I create an organization for a district', js: true do
+  FactoryGirl.create :district, name: 'Baz School District', country: 'US'
+  admin = FactoryGirl.create :admin
 
-      sign_in admin
-      visit organizations_path
-      click_on 'Create New Organization'
+  sign_in admin
+  visit organizations_path
+  click_on 'Create New Organization'
 
-      fill_in 'Name', with: 'Baz High School'
-      # After choosing the district, the region select will populate with values via JS
-      select 'Baz School District', from: 'organization_district_id'
-      fill_in 'Address', with: '123 Fake St'
-      fill_in 'City', with: 'Madison'
-      select 'Wisconsin', from: 'organization_region'
-      fill_in 'Zip / Postal Code', with: '53711'
-      fill_in "Principal's Email", with: 'principal@example.com'
+  fill_in 'Name', with: 'Baz High School'
+  # After choosing the district, the region select will populate with values via JS
+  select 'Baz School District', from: 'organization_district_id'
+  fill_in 'Address', with: '123 Fake St'
+  fill_in 'City', with: 'Madison'
+  select 'Wisconsin', from: 'organization_region'
+  fill_in 'Zip / Postal Code', with: '53711'
+  fill_in "Principal's Email", with: 'principal@example.com'
 
-      click_on 'Create Organization'
-      expect(page.current_path).to eq organizations_path
-      expect(page).to have_content 'Organization was successfully created.'
-      expect(page).to have_content 'Baz High School'
-    end
+  click_on 'Create Organization'
+  expect(page.current_path).to eq organizations_path
+  expect(page).to have_content 'Organization was successfully created.'
+  expect(page).to have_content 'Baz High School'
+end
+```
 
 ## Javascript
 * Put `document.ready` inside of the javascript file and not the html file
@@ -84,12 +88,16 @@ Good:
 
 ### Include actionable item
 
-If you report to rollbar manually, include an actionable item.
+If you report to Rollbar manually, include an actionable item.
 
 Bad:
 
-    Rollbar.error "No coordinates found for #{location}."
+```ruby
+Rollbar.error "No coordinates found for #{location}."
+```
 
 Good:
 
-    Rollbar.error "No coordinates found for #{location}. Now go figure out why a non-existant city was passed in from mixpanel"
+```ruby
+Rollbar.error "No coordinates found for #{location}. Now go figure out why a non-existant city was passed in from mixpanel"
+```
